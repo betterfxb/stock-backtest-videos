@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>「假如你不小心」回测短视频系列 · 内容规划方案</title>
+<style>
+:root{
+  --bg:#FAF8F5; --card:#FFFFFF; --ink:#1A1520; --ink2:#5F5E5A; --ink3:#888780;
+  --line:rgba(26,21,32,.12); --line2:rgba(26,21,32,.07);
+  --navy:#1B3A6B; --blue:#2E6BA8; --gold:#C9A227;
+  --bgc:#F7F4EF; --surface:#FFFFFF; --line2:#E8E2D6;
+  --up:#C0392B; --down:#1E8449; --flat:#B7791F; --dd:#7B241C;
+  --inkc:#14110C; --ink2c:#4A4438; --ink3c:#7D7565;
+  --amber:#BA7517; --amberL:#FAEEDA;
+  --dark:#14110C;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--bgc,#F7F4EF); color:var(--inkc);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:15px; line-height:1.75; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1000px;margin:0 auto;padding:0 28px 100px}
+
+header{padding:64px 0 40px;border-bottom:1px solid var(--line2);margin-bottom:44px}
+.kicker{font-size:12px;letter-spacing:.14em;color:var(--navy);font-weight:600;margin-bottom:18px}
+h1{font-size:34px;line-height:1.3;font-weight:700;letter-spacing:-.02em;margin-bottom:20px}
+.lede{font-size:16px;color:var(--ink2c);max-width:660px}
+.meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.chip{font-size:12px;font-family:ui-monospace,Menlo,monospace;color:var(--ink2c);
+  background:var(--surface);border:1px solid var(--line2);border-radius:6px;padding:5px 11px}
+
+h2{font-size:23px;font-weight:700;letter-spacing:-.01em;margin:56px 0 8px;
+  padding-top:22px;border-top:1px solid var(--line2);scroll-margin-top:24px}
+h2 .num{color:var(--navy);font-family:ui-monospace,Menlo,monospace;font-size:15px;
+  margin-right:12px;font-weight:600}
+h3{font-size:17px;font-weight:650;margin:32px 0 12px}
+h4{font-size:14px;font-weight:650;margin:22px 0 8px;color:var(--inkc)}
+p{margin:12px 0}
+ul,ol{margin:12px 0 12px 22px}
+li{margin:7px 0}
+code{font-family:ui-monospace,Menlo,monospace;font-size:13px;background:rgba(26,21,32,.055);
+  padding:2px 6px;border-radius:4px;color:var(--navy)}
+
+.obs,.adv{border-radius:12px;padding:20px 24px;margin:20px 0;border-left:3px solid}
+.obs{background:var(--surface);border:1px solid var(--line2);border-left-color:var(--ink3c)}
+.adv{background:#EEF2F7;border:1px solid rgba(212,83,126,.18);border-left-color:var(--navy)}
+.tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.08em;
+  padding:3px 9px;border-radius:4px;margin-bottom:12px}
+.obs .tag{background:rgba(26,21,32,.07);color:var(--ink2c)}
+.adv .tag{background:var(--navy);color:#fff}
+.obs>:first-child,.adv>:first-child{margin-top:0}
+.obs>:last-child,.adv>:last-child{margin-bottom:0}
+
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:14px;
+  background:var(--surface);border:1px solid var(--line2);border-radius:10px;overflow:hidden}
+th{text-align:left;padding:11px 14px;background:rgba(26,21,32,.04);font-weight:650;
+  font-size:13px;color:var(--ink2c);border-bottom:1px solid var(--line2)}
+td{padding:11px 14px;border-bottom:1px solid var(--line2);vertical-align:top}
+tr:last-child td{border-bottom:none}
+.mono{font-family:ui-monospace,Menlo,monospace;font-size:13px;white-space:nowrap}
+
+pre{background:var(--dark);color:#9FE1CB;border-radius:10px;padding:20px 22px;
+  overflow-x:auto;margin:18px 0;font-size:13px;line-height:1.7}
+pre .k{color:#F5C97B}
+pre .s{color:#9FE1CB}
+pre .c{color:#888780}
+pre .n{color:#F4C0D1}
+
+.callout{background:var(--surface);border:1px solid var(--line2);border-radius:12px;
+  padding:20px 24px;margin:22px 0}
+.callout.warn{background:#FAF0DC;border-color:rgba(186,117,23,.22)}
+.callout.stop{background:#F8E8E6;border-color:rgba(226,75,74,.22)}
+.callout p:first-child{margin-top:0}
+.callout p:last-child{margin-bottom:0}
+.callout strong{font-weight:650}
+
+.bars{margin:20px 0}
+.bar{display:flex;align-items:center;gap:14px;margin:9px 0;font-size:13px}
+.bar .lb{width:112px;flex-shrink:0;color:var(--ink2c)}
+.bar .tr{flex:1;height:20px;background:rgba(26,21,32,.05);border-radius:4px;overflow:hidden}
+.bar .fl{height:100%;background:var(--blue);border-radius:4px}
+.bar .fl.c2{background:var(--navy)}
+.bar .fl.c3{background:#993556}
+.bar .pc{width:64px;text-align:right;font-family:ui-monospace,Menlo,monospace;
+  font-size:12px;color:var(--ink2c);flex-shrink:0}
+
+.phone{background:var(--surface);border-radius:14px;padding:26px 22px;margin:22px 0;
+  max-width:290px;border:1px solid var(--line2);box-shadow:0 1px 3px rgba(20,17,12,.08)}
+.phone .t1{color:var(--inkc);font-size:19px;font-weight:650;text-align:center;line-height:1.5}
+.phone .t2{color:var(--inkc);font-size:19px;font-weight:650;text-align:center;line-height:1.5}
+.phone .gl{color:var(--blue)}
+.phone .gd{color:#EF9F27}
+.phone .rt{color:var(--blue);font-size:38px;font-weight:700;text-align:right;
+  margin:14px 0 2px;letter-spacing:-.02em}
+.phone .dt{color:var(--ink3c);font-size:12px;text-align:right;margin-bottom:16px}
+.phone .cv{height:76px;background:#F2EEE7;border-radius:5px;margin-bottom:10px;
+  display:flex;align-items:center;padding:0 10px}
+.phone .cd{background:#F2EEE7;border-left:3px solid var(--dd);border-radius:4px;
+  padding:9px 12px;margin-bottom:10px}
+.phone .cd .a{color:var(--blue);font-size:11px;font-weight:600}
+.phone .cd .b{color:var(--ink2c);font-size:10.5px;line-height:1.6}
+.phone .cp{color:var(--ink3c);font-size:10px;text-align:center;margin-top:12px}
+
+.swatches{display:flex;flex-wrap:wrap;gap:9px;margin:18px 0}
+.sw{width:74px;text-align:center}
+.sw i{display:block;height:42px;border-radius:7px;border:1px solid var(--line2);margin-bottom:5px}
+.sw span{font-size:10.5px;font-family:ui-monospace,Menlo,monospace;color:var(--ink2c)}
+
+.checks{list-style:none;margin-left:0}
+.checks li{padding-left:26px;position:relative;margin:8px 0}
+.checks li::before{content:"";position:absolute;left:0;top:8px;width:14px;height:14px;
+  border:1.5px solid var(--navy);border-radius:3px}
+
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:20px 0}
+.card{background:var(--surface);border:1px solid var(--line2);border-radius:12px;padding:18px 20px}
+.card h4{margin-top:0}
+.card p{font-size:13.5px;color:var(--ink2c);margin:8px 0 0}
+
+footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--line2);
+  font-size:12.5px;color:var(--ink3c);line-height:1.9}
+
+@media(max-width:640px){
+  .wrap{padding:0 18px 60px}
+  h1{font-size:26px} h2{font-size:20px} header{padding:40px 0 30px}
+  .bar .lb{width:84px;font-size:12px}
+  table{font-size:13px} th,td{padding:9px 10px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">内容规划方案 · v3</div>
+  <h1>「假如你不小心」历史回测短视频系列</h1>
+  <p class="lede">基于对 86 秒竖屏成片的逐帧拆解，输出的可复刻内容体系。v3 起确立四项铁律：一期只讲一只股票、只用折线图、坐标轴必须完整标注、优先展示长期走势。</p>
+  <div class="meta">
+    <span class="chip">版本 v3</span>
+    <span class="chip">一期一标的</span>
+    <span class="chip">纯折线图</span>
+    <span class="chip">完整坐标轴</span>
+    <span class="chip">区间 ≥ 12 个月</span>
+  </div>
+</header>
+
+<div class="callout stop">
+  <p><strong>v3 四项铁律（优先级高于本文档其他内容）</strong></p>
+  <ol style="margin-bottom:0">
+    <li><strong>一期只讲一只股票</strong>——禁止排行榜、TOP3 卡片、多股对比、并列涨幅列表；任何视图不得混合多只股票数据</li>
+    <li><strong>只用折线图</strong>——禁止蜡烛图 / K 线 / 柱状图 / 面积图 / 成交量柱 / 均线副图，代码中已移除相关组件</li>
+    <li><strong>坐标轴必须完整</strong>——X 轴日期 + Y 轴价格，刻度值必须实际渲染可见，轴标题齐全，禁止只画折线没数字</li>
+    <li><strong>优先长期走势</strong>——分析区间不少于 12 个月，短期数据仅作风险提示辅助</li>
+  </ol>
+</div>
+
+<div class="callout">
+  <p><strong>一句话拆解结论</strong>：这条片子用「结论前置 + 时间轴推进 + 坐标轴缩放」三件事，把一个 6 年、净值从 100 万到 353 万再到 254 万的复杂曲线压进 86 秒竖屏。原片用的是<strong>折线走势图（非 K 线）</strong>，本规范予以保留并强化坐标轴标注；原片的单标的叙事结构同样保留并明确为铁律 1。</p>
+</div>
+
+<h2><span class="num">01</span>选题定位</h2>
+
+<div class="obs">
+  <span class="tag">视频中呈现的做法</span>
+  <h4>标题三行公式</h4>
+  <pre><span class="k">假如你</span>{情绪词}          <span class="c">← 第1行，不确定性钩子</span>
+{年份}年买{金额}{品类}    <span class="c">← 第2行，具体到可复现</span>
+{动作}{持有期}<span class="c">           ← 第3行，行为承诺</span></pre>
+  <p>情绪词用的是「<strong>不小心</strong>」——不是「贪心」「冲动」这类贬义词，而是<strong>把赚到的钱归因于运气而非能力</strong>。这是整条片子的隐性观点，也是它区别于同类内容的地方。</p>
+  <h4>参数化程度</h4>
+  <p>年份（2020）、金额（100万）、品类（黄金）、期限（6年）四个变量全部显式暴露在标题上，观众一眼就知道讲什么，且能自行代入。</p>
+  <h4>目标受众</h4>
+  <p>财经内容泛受众。不是投资者，是<strong>被投资内容教育过的普通人</strong>——看过「黄金十年」这类叙事，但没被系统讲过一次真实曲线长什么样。</p>
+</div>
+
+<div class="adv">
+  <span class="tag">落地建议</span>
+  <h4>四个正交维度做可持续角度</h4>
+  <p>不要只做「换一个品类再算一遍」，母题真正的延展空间在这四维交叉里：</p>
+  <div class="grid2">
+    <div class="card"><h4>资产维度</h4><p>黄金 / 白银 / 原油 / 沪深300 / 标普500 / 纳指 / 比特币 / 国债 / 中概互联 / 新能源车指数</p></div>
+    <div class="card"><h4>持有期维度</h4><p>1年 / 3年 / 5年 / 6年 / 10年 / 买在最高点后的 N 年</p></div>
+    <div class="card"><h4>起点维度</h4><p>历史最高点 / 历史最低点 / 某年年初 / 恐慌当日 / 议息会议当天</p></div>
+    <div class="card"><h4>动作维度</h4><p>一次性买入 / 定投 / 分批加仓 / 中途下车 / 只在暴跌日买</p></div>
+  </div>
+  <h4>四个优先排期的强钩子</h4>
+  <ol>
+    <li><strong>买在最高点</strong>——起点定在历史顶部，标题改「假如你不小心买在了最高点」，张力最强</li>
+    <li><strong>中途下车</strong>——在最低点附近卖出，「假如你在最难的时候割了」</li>
+    <li><strong>定投 vs 一次性</strong>——同资产两条曲线对照，回答「抄底到底有没有用」</li>
+    <li><strong>同一年不同资产</strong>——起点钉死同一年，比谁更能扛</li>
+  </ol>
+  <div class="callout warn" style="margin-bottom:0">
+    <p><strong>这三点是系列的立身之本，不要在后续期数里被标题党化改掉：</strong>① 归因反直觉（赚了 154% 但定性为「不小心」）；② 不美化中段（明确呈现 2022 年「横了两年」）；③ 结尾主动展示亏损面（不回停在 196.80% 的最高点）。</p>
+  </div>
+</div>
+
+<h2><span class="num">02</span>内容结构</h2>
+
+<h3>时间轴模块占比</h3>
+<div class="bars">
+  <div class="bar"><span class="lb">钩子 0–3s</span><span class="tr"><span class="fl c3" style="width:3.5%"></span></span><span class="pc">3.5%</span></div>
+  <div class="bar"><span class="lb">起投即震荡</span><span class="tr"><span class="fl" style="width:12.8%"></span></span><span class="pc">12.8%</span></div>
+  <div class="bar"><span class="lb">回撤至个位数</span><span class="tr"><span class="fl" style="width:20.9%"></span></span><span class="pc">20.9%</span></div>
+  <div class="bar"><span class="lb">趋势确立</span><span class="tr"><span class="fl" style="width:30.2%"></span></span><span class="pc">30.2%</span></div>
+  <div class="bar"><span class="lb">主升浪加速</span><span class="tr"><span class="fl c2" style="width:23.3%"></span></span><span class="pc">23.3%</span></div>
+  <div class="bar"><span class="lb">冲顶回落+收尾</span><span class="tr"><span class="fl c3" style="width:9.3%"></span></span><span class="pc">9.3%</span></div>
+</div>
+
+<div class="obs">
+  <span class="tag">视频中呈现的做法</span>
+  <h4>六段式叙事框架</h4>
+  <ol>
+    <li><strong>钩子</strong>（0–3s）结果前置，一屏说完最终资产与收益率</li>
+    <li><strong>起点</strong>（3–8s）买入当下，收益率极低甚至微亏，建立「这不是好事」的直觉</li>
+    <li><strong>磨底</strong>（8–32s）长时间停滞/回撤，最关键的一段，建立「长期很难熬」认知</li>
+    <li><strong>主升</strong>（32–58s）收益率陡峭上行，回报感最强，配宏观事件解释</li>
+    <li><strong>高点</strong>（58–78s）收益峰值，画面出现「主升浪」标签</li>
+    <li><strong>回落+收尾</strong>（78–86s）冲顶回撤，落到期末真实值，回到开头数字闭环</li>
+  </ol>
+  <h4>最精巧的设计：数字闭环</h4>
+  <p>结尾的 <strong>154.12% / 254.12 万</strong>，与开头钩子的数字<strong>完全一致</strong>。观众在 3 秒时知道了答案，86 秒后再回到这个答案时，感受已经从「哦」变成「原来中间这么难熬」。</p>
+</div>
+
+<div class="adv">
+  <span class="tag">落地建议</span>
+  <h4>时长配比标准</h4>
+  <table>
+    <thead><tr><th style="width:130px">模块</th><th style="width:120px">占比</th><th>依据</th></tr></thead>
+    <tbody>
+      <tr><td>钩子</td><td class="mono">3–5%</td><td>竖屏信息流只有 1.5 秒决定是否划走，必须一屏说完</td></tr>
+      <tr><td>起点</td><td class="mono">5–10%</td><td>越快越好，建立「起投即低点」的反差</td></tr>
+      <tr><td><strong>磨底</strong></td><td class="mono"><strong>25–30%</strong></td><td><strong>不可压缩，这段决定内容可信度</strong></td></tr>
+      <tr><td><strong>主升</strong></td><td class="mono"><strong>25–30%</strong></td><td><strong>回报感与信息密度峰值区</strong></td></tr>
+      <tr><td>高点</td><td class="mono">15–20%</td><td>峰值展示，不可省略</td></tr>
+      <tr><td>回落收尾</td><td class="mono">10–15%</td><td>决定内容的诚实度与可信度</td></tr>
+    </tbody>
+  </table>
+  <div class="callout">
+    <p><strong>核心比例原则：磨底 : 主升 ≈ 1:1。</strong>只讲主升就是宣传，只讲磨底就是劝退，1:1 才有「值」的感觉。</p>
+  </div>
+</div>
+
+<h2><span class="num">03</span>分析框架</h2>
+
+<div class="adv">
+  <span class="tag">v3 新增 · 落地必查</span>
+  <h4>图表规范检查清单</h4>
+  <h4 style="margin-top:20px">A. 标的唯一性</h4>
+  <ul class="checks">
+    <li>本期标的<strong>只有 1 个</strong>，已写入选题卡</li>
+    <li>全片无任何第二只股票名称、代码、涨幅</li>
+    <li>无排行榜 / TOP N 卡片 / 并列涨幅列表 / 多股对比图</li>
+    <li>数据模块只读取 <code>data.stocks[0]</code></li>
+  </ul>
+
+  <h4>B. 图形形式</h4>
+  <ul class="checks">
+    <li>图表组件仅使用 <code>TrendChart</code>（折线图）</li>
+    <li>代码中不存在 <code>Candles</code>、蜡烛图、柱状图、成交量柱</li>
+    <li>无均线、无副图、无双轴叠加</li>
+  </ul>
+
+  <h4>C. 坐标轴完整性（重点）</h4>
+  <ul class="checks">
+    <li>X 轴刻度值<strong>实际渲染可见</strong>，字号 ≥ 24px</li>
+    <li>X 轴首尾刻度显示年份（如 <code>2026-07</code>），中间显示 <code>MM-DD</code></li>
+    <li>X 轴数量 5–6 个，均分取样不重叠</li>
+    <li>Y 轴刻度值<strong>实际渲染可见</strong>，字号 ≥ 24px</li>
+    <li>Y 轴数量 4–5 个，步长归整到 1/2/5/10 的整数倍</li>
+    <li>Y 轴轴标题存在：「价格（元）」或「累计涨跌幅」</li>
+    <li>X 轴轴标题存在：「日期」</li>
+    <li>基准线存在且带文字标注（成本价 / 买入时点 0%）</li>
+    <li>所有刻度值在画布内，无出血、无重叠</li>
+  </ul>
+
+  <h4>D. 长期走势</h4>
+  <ul class="checks">
+    <li>分析区间 ≥ 12 个月</li>
+    <li>主图 Y 轴覆盖完整区间，未截断近期数据</li>
+    <li>短期指标仅出现在风险提示段，不占主图</li>
+  </ul>
+
+  <h4>刻度步长归整算法</h4>
+  <p>避免出现 <code>37.14%</code> 这类刻度，归整到 1/2/5/10 的整数倍：</p>
+<pre><span class="k">function</span> <span class="n">niceTicks</span>(lo, hi, count = <span class="n">5</span>) {
+  <span class="k">const</span> raw = (hi - lo) / count;
+  <span class="k">const</span> mag = <span class="n">Math</span>.pow(<span class="n">10</span>, <span class="n">Math</span>.floor(<span class="n">Math</span>.log10(raw)));
+  <span class="k">const</span> n = raw / mag;
+  <span class="k">const</span> step = (n &gt;= <span class="n">5</span> ? <span class="n">10</span> : n &gt;= <span class="n">2</span> ? <span class="n">5</span> : n &gt;= <span class="n">1</span> ? <span class="n">2</span> : <span class="n">1</span>) * mag;
+  <span class="k">const</span> start = <span class="n">Math</span>.ceil(lo / step) * step;
+  <span class="k">const</span> out = [];
+  <span class="k">for</span> (<span class="k">let</span> v = start; v &lt;= hi + step * <span class="n">1e-6</span>; v += step) out.push(v);
+  <span class="k">return</span> out;
+}</pre>
+
+  <h4>X 轴标签策略</h4>
+  <table>
+    <thead><tr><th style="width:110px">位置</th><th style="width:150px">格式</th><th>字重</th></tr></thead>
+    <tbody>
+      <tr><td>首刻度</td><td class="mono">2026-07（含年）</td><td>500</td></tr>
+      <tr><td>尾刻度</td><td class="mono">2026-09（含年）</td><td>500</td></tr>
+      <tr><td>中间刻度</td><td class="mono">07-24（月-日）</td><td>400</td></tr>
+      <tr><td>跨年时</td><td class="mono">全部含年份</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <p><strong>本期验证</strong>：贵州茅台（sh600519），区间 2019-10 ~ 2026-08 共 <strong>83 个月（6.9 年）</strong>，区间涨幅 +41.14%，最大回撤 −41.86%（2022-10）。五项铁律校验全部通过。</p>
+  </div>
+</div>
+
+<div class="phone">
+  <div class="t1">假如你<span class="gd">不小心</span></div>
+  <div class="t2">2020年买100万<span class="gl">黄金</span></div>
+  <div class="t2">坚持拿满6年</div>
+  <div class="rt">196.80%</div>
+  <div class="dt">2026-04-08</div>
+  <div class="cv"><svg viewBox="0 0 240 76" style="width:100%;height:76px" preserveAspectRatio="none">
+    <text x="4" y="12" fill="#7D7565" font-size="9">140万 ┄ 197万 ┄ 370万</text>
+    <polyline points="4,68 34,52 64,60 94,40 124,50 154,28 184,20 232,26"
+      fill="none" stroke="#2E6BA8" stroke-width="1.5"/>
+    <circle cx="232" cy="26" r="3" fill="#2E6BA8"/>
+  </svg></div>
+  <div class="cd"><div class="a">2025年12月 · 主升浪</div>
+    <div class="b">一年涨掉前面五年</div></div>
+  <div class="cp">历史数据模拟，切勿作为投资建议</div>
+</div>
+
+<div class="obs">
+  <span class="tag">视频中呈现的做法</span>
+  <h4>画面五层，只有两层在变</h4>
+  <div class="grid2">
+    <div class="card"><h4>全程固定（占屏约 55%）</h4><p>标题三行 · 右上双行数据块（收益率大号粉字 + 日期） · 底部合规条</p></div>
+    <div class="card"><h4>逐段变化（占屏约 45%）</h4><p>曲线右端游标推进 · Y 轴动态缩放 · 左下事件卡整张换页 · 阶段标签</p></div>
+  </div>
+  <h4>只用了三类数据</h4>
+  <table>
+    <thead><tr><th style="width:140px">数据种类</th><th style="width:180px">呈现形式</th><th>作用</th></tr></thead>
+    <tbody>
+      <tr><td>资产净值曲线</td><td>粉色折线，纵轴「XX万」</td><td>主叙事线</td></tr>
+      <tr><td>收益率序列</td><td>右上大号数字 + 日期</td><td>情绪计</td></tr>
+      <tr><td>宏观事件标签</td><td>左下事件卡</td><td>因果归因</td></tr>
+    </tbody>
+  </table>
+  <h4>事件卡固定句式</h4>
+  <p><code>日期 · 类型</code> → <code>一句话数字结论</code> → <code>宏观原因 + 具体日期 + 资产数值</code></p>
+  <pre>2026年7月 · <span class="k">回撤</span> / 从 353.10 万跌到 245.33 万
+2026 年 1 月 29 日冲上区间最高 353.10 万后掉头向下，
+7 月 1 日只剩 245.33 万，最大回撤 <span class="n">−30.52%</span>；期末 254.12 万。</pre>
+  <h4>阶段标签实测取值</h4>
+  <ul>
+    <li><strong>放水推新高</strong> / 避险与流动性一起涌进来</li>
+    <li><strong>横了两年</strong> / 涨完之后是漫长的原地走</li>
+    <li><strong>降息交易</strong> / 实际利率下行打开空间</li>
+    <li><strong>主升浪</strong> / 一年涨掉前面五年</li>
+    <li><strong>冲顶后回落</strong> / 最高点下来，回撤三成</li>
+  </ul>
+  <h4>颜色即情绪（新规范 v2）</h4>
+  <div class="swatches">
+    <div class="sw"><i style="background:#2E6BA8"></i><span>#2E6BA8 曲线</span></div>
+    <div class="sw"><i style="background:#1B3A6B"></i><span>#1B3A6B 标题轴线</span></div>
+    <div class="sw"><i style="background:#C9A227"></i><span>#C9A227 核心数字</span></div>
+    <div class="sw"><i style="background:#C0392B"></i><span>#C0392B 涨</span></div>
+    <div class="sw"><i style="background:#1E8449"></i><span>#1E8449 跌</span></div>
+    <div class="sw"><i style="background:#B7791F"></i><span>#B7791F 横盘</span></div>
+    <div class="sw"><i style="background:#7B241C"></i><span>#7B241C 回撤</span></div>
+    <div class="sw"><i style="background:#7D7565"></i><span>#7D7565 中性文字</span></div>
+  </div>
+  <p style="font-size:12.5px;color:var(--ink3c);margin-top:10px">涨红跌绿（中国习惯）· 亮底高对比 · 文本对比度全部 ≥ 4.5:1</p>
+  </div>
+</div>
+
+<div class="adv">
+  <span class="tag">落地建议</span>
+  <h4>补齐内部指标体系（画面只出 3 个）</h4>
+  <table>
+    <thead><tr><th style="width:160px">指标</th><th style="width:220px">公式</th><th>用途</th></tr></thead>
+    <tbody>
+      <tr><td>总收益率</td><td class="mono">(期末−初始)/初始</td><td>视频主数字，必须有</td></tr>
+      <tr><td><strong>含息总收益率</strong></td><td class="mono">(期末市值+累计分红−初始)/初始</td><td><strong>A 股必备</strong>，见下方说明</td></tr>
+      <tr><td><strong>含息年化收益率</strong></td><td class="mono">(含息总资产/初始)^(1/年数)−1</td><td><strong>跨期对比的唯一可比口径</strong></td></tr>
+      <tr><td>年化收益率</td><td class="mono">(期末/初始)^(1/年数)−1</td><td>不含息口径，须明确标注</td></tr>
+      <tr><td>最大回撤 MDD</td><td class="mono">min((P<sub>t</sub>−P<sub>s</sub>)/P<sub>s</sub>)</td><td>视频已用，做完整性校验</td></tr>
+      <tr><td>回撤区间时长</td><td class="mono">前高到前低的天数</td><td>判断「难受了多久」</td></tr>
+      <tr><td>回撤修复天数</td><td class="mono">前低回到前高天数</td><td>判断「回本有多难」</td></tr>
+      <tr><td>年化波动率</td><td class="mono">std(日收益)×√252</td><td>衡量持有体验</td></tr>
+      <tr><td>最大浮亏</td><td class="mono">min(P<sub>t</sub>/初始−1)</td><td>观众最真实的痛点</td></tr>
+      <tr><td>正收益日占比</td><td class="mono">上涨日数/总日数</td><td>解释「为什么拿不住」</td></tr>
+      <tr><td>累计分红</td><td class="mono">逐次除息日派息×持股数</td><td>A 股长期持有的关键变量</td></tr>
+    </tbody>
+  </table>
+  <p><strong>建议上画面的 3 个：</strong>总收益率（主数字）· 含息年化收益率（字幕第二行小字）· 最大回撤（结尾段必须出现）。</p>
+  <div class="callout warn">
+    <p><strong>新增说明（v2，来自茅台实测）</strong>：A 股标的长期持有时，<strong>分红对结论影响极大</strong>。茅台 2020-01 买入至 2026-09，不含息总收益率 58.61%，含息后为 <strong>91.29%</strong>，年化从 7.16% 提升到 <strong>10.15%</strong>。若视频只用不含息口径，会系统性低估 A 股长期持有价值。因此 A 股标的<strong>必须计算并展示含息口径</strong>，同时明确标注是否含息。</p>
+    <p>另需注意：回测起点若恰为区间最低点（本例 2020-01-23 即为区间最低），最大浮亏会显示为 −0.00%，须在画面说明「买入当日即为区间最低点」，否则观众会质疑数据真实性。</p>
+  </div>
+
+  <h4>节点筛选规则（固化为算法）</h4>
+  <ol>
+    <li><strong>起点</strong>：回测起始日，或距起点最近的极值日</li>
+    <li><strong>阶段极值</strong>：按 <strong>12 个月</strong>窗口取窗口内极值（不建议用 3–6 个月，实测会导致节点数超标）</li>
+    <li><strong>大拐点</strong>：相对 6 个月前涨跌幅 &gt; 12%</li>
+    <li><strong>宏观/事件日</strong>：央行议息、CPI 发布、财报披露、重大政策日</li>
+    <li><strong>终点</strong>：数据截止日，必须选</li>
+  </ol>
+  <p><strong>合并收敛规则（v2 新增，必做）</strong></p>
+  <ul>
+    <li>相邻节点间隔 ≤ 2 个月视为同一段，<strong>只保留该段中资产值最高/最低的那个</strong></li>
+    <li>若合并后仍多于 12 个，按「距前 6 个月的波动幅度」降序取前 10 个，起点与终点强制保留</li>
+    <li><strong>校验器必须硬性拦截</strong>：节点数不在 8–12 区间直接判定「需重筛」</li>
+  </ul>
+  <p class="ts" style="color:var(--ink3c);font-size:12.5px">说明：茅台实测首轮按 6 个月窗口筛出 29 个节点，超出区间；加入合并收敛后落至 9 个，符合规范。</p>
+
+  <h4>风险提示三层呈现（全保留）</h4>
+  <ul>
+    <li><strong>常驻层</strong>——底部合规条全程可见</li>
+    <li><strong>节点级</strong>——事件卡主动写出回撤数值（−30.52%）</li>
+    <li><strong>标签级</strong>——阶段标签本身带情绪词（「冲顶后回落」）</li>
+  </ul>
+</div>
+
+<h2><span class="num">04</span>执行流程</h2>
+
+<div class="adv">
+  <span class="tag">落地建议</span>
+  <p style="font-family:ui-monospace,Menlo,monospace;font-size:13px;color:var(--ink2c);background:rgba(26,21,32,.05);padding:14px 16px;border-radius:8px;line-height:1.9">
+  选题立项 → 数据获取 → 清洗校验 → 建模回测 → 指标计算 → 节点筛选<br>
+  → 宏观归因 → 文案撰写 → 曲线渲染 → 视频合成 → 合规校验 → 发布归档
+  </p>
+
+  <h4>阶段一 · 数据层</h4>
+  <table>
+    <thead><tr><th style="width:60px">步骤</th><th style="width:210px">动作</th><th>交付物</th><th style="width:190px">卡点</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">1</td><td>立项：确定资产/年份/金额/持有期</td><td class="mono">选题卡（一页）</td><td>参数必须四项齐全，缺一不开工</td></tr>
+      <tr><td class="mono">2</td><td>取数：拉取日频收盘价序列</td><td class="mono">raw_prices.csv</td><td>必须含复权说明</td></tr>
+      <tr><td class="mono">3</td><td>清洗：去重、缺失填充、停牌处理</td><td class="mono">clean_prices.csv</td><td>缺失 &gt; 5% 需人工确认</td></tr>
+      <tr><td class="mono">4</td><td>校验：起止值、极值、异常跳变</td><td>校验报告</td><td>异常跳变 &gt; 20% 必须人工确认</td></tr>
+    </tbody>
+  </table>
+
+  <h4>阶段二 · 回测层</h4>
+  <table>
+    <thead><tr><th style="width:60px">步骤</th><th style="width:210px">动作</th><th>交付物</th><th style="width:190px">卡点</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">5</td><td>净值化</td><td class="mono">nav.csv</td><td>份额口径统一</td></tr>
+      <tr><td class="mono">6</td><td>计算全部 8 个指标</td><td class="mono">metrics.json</td><td>回撤必须人工复核</td></tr>
+      <tr><td class="mono">7</td><td>筛选 8–12 个节点</td><td class="mono">nodes.csv</td><td>超出区间则重筛</td></tr>
+      <tr><td class="mono">8</td><td>宏观事件归因</td><td class="mono">events.csv</td><td>每节点必须有真实事件</td></tr>
+    </tbody>
+  </table>
+
+  <h4>阶段三 · 内容层</h4>
+  <table>
+    <thead><tr><th style="width:60px">步骤</th><th style="width:210px">动作</th><th>交付物</th><th style="width:190px">卡点</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">9</td><td>钩子：定标题三行 + 开场大字报</td><td class="mono">title.txt</td><td>必须含最终数字</td></tr>
+      <tr><td class="mono">10</td><td>卡片：写 8–12 张事件卡 + 阶段标签</td><td class="mono">cards.md</td><td>每卡 ≤ 60 字</td></tr>
+      <tr><td class="mono">11</td><td>渲染：生成曲线逐帧序列</td><td class="mono">frames/*.png</td><td>坐标轴缩放须平滑</td></tr>
+      <tr><td class="mono">12</td><td>合成：拼接帧 + 配乐 + 字幕</td><td class="mono">final.mp4</td><td>竖屏 1080×1920，60fps</td></tr>
+    </tbody>
+  </table>
+
+  <h4>阶段四 · 合规层</h4>
+  <table>
+    <thead><tr><th style="width:60px">步骤</th><th style="width:210px">动作</th><th>交付物</th><th style="width:190px">卡点</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">13</td><td>合规校验</td><td>合规检查表</td><td><strong>任一项不过则不发</strong></td></tr>
+      <tr><td class="mono">14</td><td>归档</td><td>归档清单</td><td>可追溯到原始数据</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout stop">
+    <p><strong>5 处必须人工确认的卡点</strong></p>
+    <ol style="margin-bottom:0">
+      <li><strong>数据源确认</strong>——期初数据的来源、口径、是否复权，书面记录</li>
+      <li><strong>异常值确认</strong>——单日涨跌幅 &gt; 20% 必须查证（可能是数据错误而非真实行情）</li>
+      <li><strong>回撤数字确认</strong>——观众最会核对的数字，错一次毁信任</li>
+      <li><strong>事件真实性</strong>——宏观事件日期与表述必须真实，不能编造因果</li>
+      <li><strong>合规声明位置</strong>——必须全程可见，不能只在片尾出现</li>
+    </ol>
+  </div>
+</div>
+
+<h2><span class="num">05</span>实现方法</h2>
+
+<div class="adv">
+  <span class="tag">落地建议</span>
+  <h4>工具链</h4>
+  <table>
+    <thead><tr><th style="width:110px">环节</th><th style="width:250px">推荐</th><th>备选</th></tr></thead>
+    <tbody>
+      <tr><td>数据获取</td><td><strong>westock CLI</strong>（腾讯自选股接口）</td><td>akshare / tushare / 券商 API</td></tr>
+      <tr><td>分红数据</td><td class="mono">westock dividend --years N</td><td>akshare stock_dividend</td></tr>
+      <tr><td>财务数据</td><td class="mono">westock finance --limit N</td><td>akshare stock_financial</td></tr>
+      <tr><td>清洗回测</td><td>pandas + numpy</td><td>polars（大数据量更快）</td></tr>
+      <tr><td>指标计算</td><td>pandas 自定义函数</td><td>empyrical（标准化指标库）</td></tr>
+      <tr><td>曲线渲染</td><td><strong>PIL 直接绘制（无额外依赖，推荐）</strong></td><td>matplotlib 帧序列 / ECharts</td></tr>
+      <tr><td>节点筛选</td><td>pandas + 极值检测 + <strong>相邻合并</strong></td><td>手工标注</td></tr>
+      <tr><td>素材归因</td><td class="mono">westock news / notice</td><td>财经媒体</td></tr>
+      <tr><td>视频合成</td><td>ffmpeg（帧序列拼接 + 音频）</td><td>剪映 / PR</td></tr>
+    </tbody>
+  </table>
+  <div class="callout">
+    <p><strong>westock 取数命令（A 股）</strong></p>
+<pre>westock search 贵州茅台  <span class="c"># 先拿代码</span>
+westock quote sh600519
+westock quote sh600519 --date 2026-09-30   <span class="c"># 指定历史日</span>
+westock kline sh600519 --period month --limit <span class="n">84</span>  <span class="c"># 月K线，7年=84月</span>
+westock finance sh600519 --limit <span class="n">8</span>          <span class="c"># 三大表</span>
+westock dividend sh600519 --years <span class="n">7</span>        <span class="c"># 分红历史（A股必备）</span>
+westock news list sh600519 --limit <span class="n">10</span>    <span class="c"># 事件归因</span></pre>
+    <p><strong>口径注意</strong>：westock 月 K 线的 <code>last</code> 为<strong>当月最后交易日收盘价，未复权</strong>。须在文案标注口径，并单独计算分红（见 §3.2）。</p>
+    <p><strong>安装</strong>：Windows 下用 PowerShell 工具调用 <code>scripts/setup.ps1 -Yes</code>（勿从 Bash 调 powershell，会被安全策略拦截），安装至 <code>~/.local/bin/westock.exe</code>。</p>
+  </div>
+  <p><strong>本机环境</strong>：ffmpeg 可用（<code>C:\ffmpeg-2023-04-17</code>）；PIL 12.3.0 可用，中文字体 <code>msyh.ttc</code> / <code>msyhbd.ttc</code> 齐备。实测 1080×1920 帧序列合成无障碍。</p>
+
+  <h4>模板 A · 回测主脚本</h4>
+<pre><span class="k">import</span> pandas <span class="k">as</span> pd, numpy <span class="k">as</span> np
+
+<span class="k">def</span> <span class="n">backtest</span>(prices, initial<span class="s">=</span><span class="n">1_000_000</span>):
+    shares = initial / prices.iloc[<span class="n">0</span>]        <span class="c"># 份额口径</span>
+    nav = prices * shares                        <span class="c"># 净值序列</span>
+    ret = nav.pct_change().dropna()
+
+    years      = (nav.index[-<span class="n">1</span>] - nav.index[<span class="n">0</span>]).days / <span class="n">365.25</span>
+    total_ret  = nav.iloc[-<span class="n">1</span>] / initial - <span class="n">1</span>
+    cagr       = (nav.iloc[-<span class="n">1</span>] / initial) ** (<span class="n">1</span>/years) - <span class="n">1</span>
+    drawdown   = (nav - nav.cummax()) / nav.cummax()
+    mdd        = drawdown.min()
+
+    <span class="k">return</span> {
+        <span class="s">"总收益率"</span>:   <span class="s">f"{total_ret:.2%}"</span>,
+        <span class="s">"年化收益率"</span>: <span class="s">f"{cagr:.2%}"</span>,
+        <span class="s">"最大回撤"</span>:   <span class="s">f"{mdd:.2%}"</span>,
+        <span class="s">"年化波动率"</span>: <span class="s">f"{ret.std()*np.sqrt(<span class="n">252</span>):.2%}"</span>,
+        <span class="s">"正收益日占比"</span>: <span class="s">f"{(ret&gt;<span class="n">0</span>).mean():.1%}"</span>,
+    }
+
+<span class="k">def</span> <span class="n">pick_nodes</span>(nav, window<span class="s">=</span><span class="s">"90D"</span>, min_move<span class="s">=</span><span class="n">0.08</span>):
+    <span class="c">"""按规则筛节点：窗口极值 + 大拐点"""</span>
+    roll_max = nav.rolling(window, min_periods<span class="s">=</span><span class="n">20</span>).max()
+    roll_min = nav.rolling(window, min_periods<span class="s">=</span><span class="n">20</span>).min()
+    extreme  = (nav &gt;= roll_max) | (nav &lt;= roll_min)
+    pivot    = nav.pct_change(window).abs() &gt; min_move
+    <span class="k">return</span> nav[extreme | pivot].resample(window).last().dropna()</pre>
+
+  <h4>模板 B · 标题公式</h4>
+<pre>TEMPLATES = [
+    <span class="s">"假如你{情绪词}\n{起始年}年买{金额}{品类}\n{动作}{持有期}"</span>,
+    <span class="s">"假如你在{最高点描述}买{金额}{品类}\n{动作}{持有期}会怎样"</span>,
+    <span class="s">"假如你在{最难时刻}{动作}\n{品类}还能拿回{目标}吗"</span>,
+    <span class="s">"同一年买{金额}\n{品类A}和{品类B}\n六年后差距有多大"</span>,
+]
+EMOTION_WORDS = [<span class="s">"不小心"</span>, <span class="s">"随手"</span>, <span class="s">"跟风"</span>, <span class="s">"听了朋友的话"</span>, <span class="s">"没看任何分析"</span>]</pre>
+
+  <h4>模板 C · 合规检查表</h4>
+  <ul class="checks">
+    <li>底部合规条全程可见（非仅片尾）</li>
+    <li>标题无收益承诺、荐股、买入建议词汇</li>
+    <li>事件归因有真实来源，日期与表述可查证</li>
+    <li>数据源已在画面或简介中标注</li>
+    <li>所有百分比数字经二次核对</li>
+    <li>收益率为历史模拟，不含任何预测</li>
+    <li>未出现「稳赚」「保本」「无风险」等禁用词</li>
+    <li>未展示任何具体买入时点的建议</li>
+  </ul>
+
+  <h4>视觉参数（新规范 v2）</h4>
+  <div class="callout warn">
+    <p><strong>画质根因（原片实测）</strong>：码率仅 276 kbps · 分辨率 576×1024 · 平均亮度 18/255（约 93% 画面纯黑）。暗底 + 荧光粉 + 低码率三者叠加，文字笔画不可逆粘连。修复方案采用<strong>亮底 + 深字</strong>并全面提高渲染规格。</p>
+  </div>
+  <table>
+    <thead><tr><th style="width:130px">类别</th><th style="width:110px">项目</th><th>值</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="4"><strong>输出规格</strong></td><td>分辨率</td><td class="mono">1080×1920（禁用 576×1024）</td></tr>
+      <tr><td>帧率</td><td class="mono">30 fps（位移动画 60 fps）</td></tr>
+      <tr><td>编码</td><td class="mono">H.264 High · yuv420p · CRF 18 · preset slow</td></tr>
+      <tr><td>容器</td><td class="mono">MP4 + faststart（禁用固定低码率）</td></tr>
+      <tr><td rowspan="4"><strong>核心色</strong></td><td>绛蓝（主色）</td><td class="mono">#1B3A6B 标题·轴线·标签底</td></tr>
+      <tr><td>亮蓝（曲线）</td><td class="mono">#2E6BA8 资产曲线主线</td></tr>
+      <tr><td>金铜（强调）</td><td class="mono">#C9A227 收益率等核心数字</td></tr>
+      <tr><td>暖灰（分隔）</td><td class="mono">#E8E2D6 网格线·分隔线</td></tr>
+      <tr><td rowspan="3"><strong>背景</strong></td><td>米白（主背景）</td><td class="mono">#F7F4EF</td></tr>
+      <tr><td>纯白（卡面）</td><td class="mono">#FFFFFF</td></tr>
+      <tr><td>文本三阶</td><td class="mono">#14110C / #4A4438 / #7D7565（对比度 15.9·8.2·4.6）</td></tr>
+      <tr><td rowspan="4"><strong>语义色</strong></td><td>涨 · 深砖红</td><td class="mono">#C0392B</td></tr>
+      <tr><td>跌 · 松绿</td><td class="mono">#1E8449</td></tr>
+      <tr><td>横盘 · 琥珀</td><td class="mono">#B7791F</td></tr>
+      <tr><td>回撤 · 暗红</td><td class="mono">#7B241C</td></tr>
+      <tr><td rowspan="3"><strong>版式</strong></td><td>曲线</td><td>先画 18px 浅色底线再叠 9px 主色（抗锯齿补偿）</td></tr>
+      <tr><td>文字层级</td><td class="mono">主数据 108px &gt; 标题 96px &gt; 卡标题 50px &gt; 阶段标签 44px &gt; 刻度 30px &gt; 合规 30px</td></tr>
+      <tr><td>坐标轴</td><td>Y 轴自适应缩放，X 轴 4 个时间刻度，本金虚线基准</td></tr>
+    </tbody>
+  </table>
+  <div class="callout">
+    <p><strong>标签避让规则</strong>：① 含中文单位（如「254.12 万」）必须用 <code>msyhbd.ttc</code>，Segoe UI Bold 无法渲染中文；② 同一密集区内的两个标签须分置曲线上方/下方；③ 贴边元素须收边 <code>left = min(x, 画布宽 − 文本宽 − 边距)</code>；④ 大字号数字须先实测文本宽再反推容器尺寸。</p>
+    <p><strong>压力测试（必做）</strong>：交付前将成片压至 276 kbps（原片同等码率）复检，所有文字须笔画完整、无粘连、色块干净。未通过则回退调整字重与对比度。</p>
+  </div>
+</div>
+
+<h2><span class="num">06</span>产出规划</h2>
+
+<div class="adv">
+  <span class="tag">v3 重构 · 一期一只</span>
+  <h4>单标的选题库 · 首批 12 期</h4>
+  <div class="callout warn">
+    <p><strong>重构说明</strong>：v2 的「24 条横切选题」隐含多标的对比，与铁律 1 冲突。v3 改为<strong>每期一个标的、一条完整曲线</strong>，形成系列感。</p>
+  </div>
+  <table>
+    <thead><tr><th style="width:52px">期号</th><th style="width:100px">标的</th><th style="width:96px">代码</th><th style="width:88px">板块</th><th style="width:132px">分析区间</th><th>叙事钩子</th></tr></thead>
+    <tbody>
+      <tr><td>001</td><td><strong>贵州茅台</strong></td><td class="mono">sh600519</td><td>白酒</td><td class="mono">2019-10 ~ 2026-08</td><td>六年半回撤 −41.86%</td></tr>
+      <tr><td>002</td><td>宁德时代</td><td class="mono">sz300750</td><td>动力电池</td><td class="mono">2021-01 ~ 2026-09</td><td>高点买入后的五年</td></tr>
+      <tr><td>003</td><td>中国平安</td><td class="mono">sh601318</td><td>保险</td><td class="mono">2019-01 ~ 2026-09</td><td>长期横盘型走势</td></tr>
+      <tr><td>004</td><td>兆易创新</td><td class="mono">sh603986</td><td>半导体</td><td class="mono">2022-01 ~ 2026-09</td><td>存储周期股典型形态</td></tr>
+      <tr><td>005</td><td>隆基绿能</td><td class="mono">sh601012</td><td>光伏</td><td class="mono">2022-06 ~ 2026-09</td><td>从千亿到百亿的过程</td></tr>
+      <tr><td>006</td><td>比亚迪</td><td class="mono">sz002594</td><td>新能源车</td><td class="mono">2021-01 ~ 2026-09</td><td>六年三倍但波动巨大</td></tr>
+      <tr><td>007</td><td>京东方Ａ</td><td class="mono">sz000725</td><td>面板</td><td class="mono">2020-01 ~ 2026-09</td><td>周期底部长期磨底</td></tr>
+      <tr><td>008</td><td>紫金矿业</td><td class="mono">sh601899</td><td>有色金属</td><td class="mono">2021-01 ~ 2026-09</td><td>资源股长期上行</td></tr>
+      <tr><td>009</td><td>中国中免</td><td class="mono">sh601888</td><td>免税</td><td class="mono">2021-06 ~ 2026-09</td><td>疫情受益到回吐</td></tr>
+      <tr><td>010</td><td>立讯精密</td><td class="mono">sz002475</td><td>消费电子</td><td class="mono">2020-01 ~ 2026-09</td><td>果链龙头的十年</td></tr>
+      <tr><td>011</td><td>通威股份</td><td class="mono">sh600438</td><td>光伏</td><td class="mono">2022-06 ~ 2026-09</td><td>高点腰斩的典型</td></tr>
+      <tr><td>012</td><td>长鑫科技</td><td class="mono">sh688825</td><td>存储芯片</td><td class="mono">2026-07 ~ 2026-09</td><td>上市两个月 60 日 +532%</td></tr>
+    </tbody>
+  </table>
+  <div class="callout">
+    <p><strong>排期原则</strong>：一期一票，讲透再换下一只。同板块标的<strong>不连续发</strong>，避免观众混淆。「刚暴涨」「高位腰斩」这类高情绪钩子安排在周五/周末发布。</p>
+    <p><strong>注意</strong>：第 012 期区间仅 3 个月，<strong>不满足铁律 4（≥12 个月）</strong>，若采用需拉长区间或改为「次新股专题」独立系列。</p>
+  </div>
+
+  <h4>每期开工前必填的选题卡</h4>
+<pre>期号：
+标的名称：
+股票代码：
+所属板块：
+分析区间（≥12 个月）：
+区间首日 / 末日收盘价：
+区间峰值价 / 峰值日：
+区间最大回撤：
+叙事钩子（这一只票最值得讲什么）：</pre>
+
+  <h4>更新频率</h4>
+  <table>
+    <thead><tr><th style="width:100px">阶段</th><th style="width:210px">频率</th><th>理由</th></tr></thead>
+    <tbody>
+      <tr><td>试运行</td><td>每周 2 条 × 4 周</td><td>验证钩子文案与钩子留存</td></tr>
+      <tr><td>稳定期</td><td>每周 2–3 条 · 周一/周四/周六 20:00</td><td>建立用户预期</td></tr>
+      <tr><td>旺季</td><td>日更</td><td>配合平台流量高峰</td></tr>
+    </tbody>
+  </table>
+  <ul>
+    <li>同一资产不连续发，避免观众疲劳</li>
+    <li>「买在高点」「中途下车」等高情绪钩子安排在周五/周末发布</li>
+    <li>数据截止日统一（每期都用最新交易日），避免新旧资产混比被质疑</li>
+  </ul>
+
+  <h4>命名规范</h4>
+<pre><span class="c"># 视频文件名（v5.1 起：股票名称 + 创作日期）</span>
+{股票名称}_{创作日期YYYYMMDD}.mp4
+中际旭创_20261006.mp4
+中际旭创_20261006_coverA.png   ← 封面同基名
+<span class="c"># 期号/代码/区间不进文件名；存量 ep001–ep006 不追溯改名</span>
+
+<span class="c"># 目录结构</span>
+回测系列/
+├── <span class="n">01_选题库/</span>  选题总表.xlsx · 已发布/
+├── <span class="n">02_数据/</span>      {资产}_{起始}/raw·clean·metrics
+├── <span class="n">03_文案/</span>      {期号}_{资产}/title.txt · cards.md · nodes.csv
+├── <span class="n">04_渲染/</span>      {期号}/frames/
+├── <span class="n">05_成片/</span>      {成片名}.mp4
+└── <span class="n">06_归档/</span>      {期号}_归档清单.md</pre>
+
+  <p><strong>选题总表必备列：</strong>期号 · 资产 · 起点年 · 金额 · 持有期 · 动作 · 钩子类型 · 期末收益率 · 最大回撤 · 年化 · 节点数 · 状态 · 发布日期 · 完播率 · 点赞 · 评论 · 收藏</p>
+
+  <h4>封面与文案规范</h4>
+  <table>
+    <thead><tr><th style="width:110px">项</th><th>规范</th></tr></thead>
+    <tbody>
+      <tr><td>封面三行式</td><td>主标题「假如你不小心+核心数字」/ 副标题「品类·持有期·最终结果」/ 角标「结论或风险词」</td></tr>
+      <tr><td>尺寸</td><td class="mono">1080×1920（与视频同比例）</td></tr>
+      <tr><td>主数字</td><td>占封面 1/3 高度，用收益率或最终资产</td></tr>
+      <tr><td>角标位置</td><td>右下固定，放风险或结论词</td></tr>
+      <tr><td><strong>禁止</strong></td><td>「暴涨」「躺赚」「千万别错过」等诱导词</td></tr>
+    </tbody>
+  </table>
+<pre><span class="c"># 发布文案模板</span>
+{品类}从 {起点净值} 走到 {终点净值}，中间最难的时候跌了 {最大回撤}。
+
+这条曲线最值得看的不是终点，是那段{磨底时长描述}。
+
+#历史回测 #资产名 #理财知识 #不构成投资建议
+
+<span class="c"># 固定话题标签（每期必带）</span>
+#历史数据模拟  #不构成投资建议  #理财知识  #资产回测</pre>
+
+  <h4>8 周执行排期</h4>
+  <table>
+    <thead><tr><th style="width:70px">周次</th><th>任务</th><th style="width:190px">交付物</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">W1</td><td>建选题总表 + 定 24 条选题</td><td>选题库 v1</td></tr>
+      <tr><td class="mono">W2</td><td>打通数据链路，跑通 3 个资产回测</td><td>脚本 + 首 3 期数据</td></tr>
+      <tr><td class="mono">W3</td><td>固化视觉模板 + 写首 4 期文案</td><td>模板 + 4 期文案</td></tr>
+      <tr><td class="mono">W4</td><td>产出首 4 期成片，发布测试</td><td>4 条成片</td></tr>
+      <tr><td class="mono">W5–6</td><td>按周 2 条发布，收集数据</td><td>8 条成片 + 数据看板</td></tr>
+      <tr><td class="mono">W7</td><td>复盘：钩子 A/B、封面点击率对比</td><td>复盘报告</td></tr>
+      <tr><td class="mono">W8</td><td>优化模板，锁定稳定期排期</td><td>模板 v2 + 排期表</td></tr>
+    </tbody>
+  </table>
+
+  <h4>核心 KPI</h4>
+  <table>
+    <thead><tr><th style="width:150px">指标</th><th style="width:100px">目标</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td>3 秒完播率</td><td class="mono">&gt; 65%</td><td>钩子有效性</td></tr>
+      <tr><td>完播率</td><td class="mono">&gt; 25%</td><td>叙事紧凑度</td></tr>
+      <tr><td><strong>收藏率</strong></td><td class="mono"><strong>&gt; 3%</strong></td><td><strong>工具型内容的核心价值指标</strong></td></tr>
+      <tr><td>评论率</td><td class="mono">&gt; 0.5%</td><td>争议度与共鸣度</td></tr>
+      <tr><td>合规问题</td><td class="mono">0</td><td>一票否决</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<h2><span class="num">07</span>合规提示</h2>
+
+<div class="obs">
+  <span class="tag">视频中呈现的做法</span>
+  <ol>
+    <li><strong>合规条全程常驻</strong>——从第 0 秒到第 86 秒底部始终可见，不是片尾一闪而过</li>
+    <li><strong>主动暴露亏损</strong>——明确写出最大回撤 −30.52%、从 353.10 万跌到 245.33 万</li>
+    <li><strong>定性为「模拟」</strong>——标题用「假如」，明确是假设情境而非预测</li>
+    <li><strong>不出现引导关注</strong>——全片无「关注我」「点赞领取」等指令</li>
+  </ol>
+</div>
+
+<div class="adv">
+  <span class="tag">落地建议</span>
+  <h4>数据引用标注（四项缺一不可）</h4>
+  <ul>
+    <li>视频内或简介中标注数据来源（如「数据来源：上金所 / Wind」）</li>
+    <li>标注复权口径与计价方式</li>
+    <li>标注数据截止日期</li>
+    <li>宏观事件注明出处（央行公告 / 统计局数据）</li>
+  </ul>
+
+  <h4>声明措辞（建议逐字采用）</h4>
+  <div class="callout">
+    <p>本视频为历史数据模拟，不构成任何投资建议。<br>
+    所示收益率为历史区间模拟结果，不代表未来收益。<br>
+    投资有风险，决策需谨慎。</p>
+  </div>
+
+  <h4>禁用词清单（脚本落地前逐一检查）</h4>
+  <table>
+    <thead><tr><th style="width:110px">类别</th><th>禁用词</th></tr></thead>
+    <tbody>
+      <tr><td>承诺类</td><td>稳赚 · 保本 · 无风险 · 必涨 · 一定 · 必然 · 翻倍</td></tr>
+      <tr><td>诱导类</td><td>赶紧上车 · 最后机会 · 错过就没了 · 内幕 · 主力</td></tr>
+      <tr><td>归因类</td><td>教你稳赢 · 跟着买就赚 · 稳赚不赔</td></tr>
+      <tr><td>时点类</td><td>建议买入 · 可以入场 · 现在正是时候</td></tr>
+    </tbody>
+  </table>
+
+  <h4>三条容易被忽略的红线</h4>
+  <div class="callout stop">
+    <ol style="margin-bottom:0">
+      <li><strong>「历史数据模拟」不能替代「数据来源标注」</strong>——前者是免责声明，后者是溯源要求，两者都要有</li>
+      <li><strong>回撤数字必须可复算</strong>——观众会去核对，错了比不做更伤</li>
+      <li><strong>宏观归因不可编造</strong>——「因为降息所以涨」这类表述要基于真实时间线，否则涉嫌虚假信息</li>
+    </ol>
+  </div>
+
+  <h4>平台与监管注意</h4>
+  <ul>
+    <li>不预测具体价格点位，不给具体买卖时点</li>
+    <li>不推荐具体产品（ETF 名称、基金代码）</li>
+    <li>宏观归因只做客观陈述，不做因果推论式荐股</li>
+    <li>原始数据与计算脚本保留至少 6 个月以备核查</li>
+    <li>收到平台合规问询须能立即提供：原始数据 + 计算过程 + 免责声明截图</li>
+  </ul>
+</div>
+
+<footer>
+  本方案基于对所提供视频的逐帧拆解（43 帧抽帧 + 关键节点精读）得出。<br>
+  §1–§3 的「视频中呈现的做法」为客观观察记录；各节「落地建议」及 §4–§7 为可执行方案，二者已分别标注。<br>
+  视频原始规格：86.07s / 576×1024 / 30fps / H.264 + AAC · 抽帧与分析产物位于 video_analysis/
+</footer>
+
+</div>
+</body>
+</html>

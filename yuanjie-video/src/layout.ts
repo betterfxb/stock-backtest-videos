@@ -1,0 +1,57 @@
+/**
+ * 版面常量（v6 居中式重排）—— 唯一来源。
+ *
+ * NavChart / Video / 校验脚本（esbuild 打包 out/layout.mjs 后同源 import）
+ * 全部引用这里；任何一处改版面只改本文件，禁止在组件或校验器里复刻数字。
+ *
+ * v6 三个核心诉求：
+ * 1) 整体垂直居中：横向 edge 条（顶部金线 / 底部合规条）固定于画布两端，
+ *    之外的「正文栈」从 SAFE_Y0=200 铺到 SAFE_Y1=1720，栈中心 = (200+1720)/2
+ *    = 960 = H/2，正好压在中线上。
+ * 2) 整体水平居中：SAFE 左右缘对称（140 与 940，关于 540 对称），
+ *    曲线图与所有卡片都收在对称框内。
+ * 3) 图表去块化：回撤底纹大色块、扫掠半透明竖块全部移除（见 NavChart），
+ *    只留曲线、面积渐变（越下越透）与必要标注。
+ *
+ * 纵向预算（1080×1920）：
+ *   顶部金线 0..10           （通栏装饰，豁免）
+ *   标头行   200..279        episode/名称 vs 月份/代码，底缘细线
+ *   报价 HUD 288..408        左：当前资产字数；右：累计收益率
+ *   标题两行 434..613
+ *   绘图区   632..1472       （NavChart 内 SVG，840px，画布绝对坐标）
+ *   时间轴   1494..1538      轴线 + 月份刻度
+ *   阶段条   1564..1590      基线 + 9 圆点 + 阶段名
+ *   事件卡   1608..1720
+ *   合规条   1852..1920       （通栏，豁免）
+ */
+
+// ── 抖音 UI 安全区（1080×1920）v6：中心对称 ──────────────────
+// 右侧交互栏 / 底部文案区 / 顶部状态区各自让出相等的呼吸带，正文栈整体居中。
+export const SAFE_X0 = 140;
+export const SAFE_X1 = 940;
+export const SAFE_Y0 = 200;
+export const SAFE_Y1 = 1720;
+
+// 绘图区：纵轴刻度收在 SAFE_X0 右侧 92px 的装订沟里（右缘补齐同样留白，
+// 使曲线本体大致围绕 540 中轴对称）。刻度文字 textAnchor=end 锚在 PX0-18，
+// "1,000" 六字符约 70px，最左落到 144 > 140，不会吃进左侧安全带。
+export const PX0 = SAFE_X0 + 92;
+export const PX1 = SAFE_X1;
+/** 绘图区顶（v6：612 → 632） */
+export const PY0 = 632;
+/** 绘图区底（v6：1112 → 1472，图区 500 → 840px） */
+export const MAIN_BOT = 1472;
+export const AXIS_Y = 1494;
+
+// 浮动读数标签：跟随播放头，超出右缘时翻到左侧，避免压进右侧白边
+export const FLOAT_W = 208;
+export const FLOAT_H = 96;
+/** 必须与 NavChart 浮标 rect 的 rx 一致（check_readout 靠它扣圆角） */
+export const CORNER = 14;
+
+export const TOTAL_FRAMES = 2760;
+
+// 快闪亮卡（Video.tsx 的 BeatOverlay 卡片）占用的纵向带。
+// Video 用它定位卡片；NavChart 让浮动报价 chip 避开它，避免被不透明快闪卡盖住。
+export const FLASH_T = 866;
+export const FLASH_B = 1036;

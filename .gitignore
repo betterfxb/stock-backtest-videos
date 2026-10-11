@@ -1,0 +1,24 @@
+# 依赖：各期自带的 node_modules（实拷贝 / junction），不要进仓库
+# 新拉取后：任选一期 npm install，其余 mklink /J 过去即可
+node_modules/
+
+# 构建产物与抽帧：out/（esbuild bundle、成片 mp4、抽帧 PNG、探针图均可重建）
+out/
+
+# 成片 mp4 体积大（~16MB/条），不进 git；如需入库请删掉这行
+# 发布成片建议走 GitHub Releases 或网盘
+*.mp4
+
+# 不相关的独立项目（自带 .gitignore 的音频工具）
+tech-surge-video/
+
+# agent 内部记忆与 python 缓存
+.workbuddy/
+.playwright-mcp/
+__pycache__/
+*.pyc
+*.pyo
+
+# 系统文件
+Thumbs.db
+.DS_Store
