@@ -49,6 +49,7 @@ n = len(rows)
 months = n - 1
 total = wan[-1] - 100.0
 cagr = ((wan[-1] / 100.0) ** (12 / months) - 1) * 100
+CAGR_TXT = ("\u2212" if cagr < 0 else "") + f"{abs(cagr):.2f}%"
 mdd = min(dd) * 100
 rets = [(wan[i] / wan[i - 1] - 1) * 100 for i in range(1, n)]
 mu = sum(rets) / len(rets)
@@ -73,7 +74,13 @@ longest_months = longest[1] - longest[0] + 1
 min_i = min(range(n), key=lambda i: wan[i])
 
 peak_i = max(range(n), key=lambda i: wan[i])
-ymax = int(max(wan[-1], wan[peak_i]) * 1.08 / 1000 + 1) * 1000
+# 纵轴上限取自与 src/axis.ts 同一套档位表（AXIS_STEPS）：顶值恒为 step×4，
+# 保证 0/25%/50%/75%/100% 五条刻度都是整数。
+# 旧公式 int(峰值*1.08/1000+1)*1000 只适配「峰值上千」的题材；亏损题材（峰值
+# 两百万级）会被顶到 1000，曲线压在底部 20%，封面与开场预览直接失去可读性。
+AXIS_STEPS = [25, 50, 100, 200, 250, 500, 1000, 2000, 2500]
+_need = max(wan[-1], wan[peak_i]) * 1.08
+ymax = next((s * 4 for s in AXIS_STEPS if s * 4 >= _need), AXIS_STEPS[-1] * 4)
 
 # ── 叙事自检：文案引用的索引必须与真实数据一致 ────────────────────
 errs = []
@@ -163,7 +170,7 @@ export const METRICS = {{
   range: "{rows[0]['date']} ~ {rows[-1]['date']}",
   startYM: "{rows[0]['date'][:7]}",
   totalRet: "{total:.2f}%",
-  cagr: "{cagr:.2f}%",
+  cagr: "{CAGR_TXT}",
   mdd: "\u2212{abs(mdd):.2f}%",
   vol: "{vol:.2f}%",
   winRate: "{win:.1f}%",
